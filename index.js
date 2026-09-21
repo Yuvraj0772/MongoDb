@@ -21,14 +21,32 @@ const app = express();
 // Displaying Data From MongoDB
 app.set("view engine","ejs");
 
-app.get('/',async(req,resp)=>{
-    await client.connect();
-    const db = client.db(dbName);
-    const Collection = db.collection('students')
+// app.get('/',async(req,resp)=>{
+//     await client.connect();
+//     const db = client.db(dbName);
+//     const Collection = db.collection('students')
 
-    const students = await Collection.find().toArray()
-    console.log(students); 
-    resp.render('students',{students});
+//     const students = await Collection.find().toArray()
+//     console.log(students); 
+//     resp.render('students',{students});
+// })
+
+// Make API with Mongo (also a alternate good way to connect mongoDB)
+
+client.connect().then((connection) =>{
+    const db = connection.db(dbName);
+
+    app.get("/api",async(req,resp)=>{
+        const Collection = db.collection("students");
+        const students = await Collection.find().toArray();
+        resp.send(students);
+    })
+
+      app.get("/ui",async(req,resp)=>{
+        const Collection = db.collection("students");
+        const students = await Collection.find().toArray();
+        resp.render('students',{students});
+    })
 })
 
 app.listen(3200);
