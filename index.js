@@ -47,6 +47,14 @@ client.connect().then((connection) =>{
         const students = await Collection.find().toArray();
         resp.render('students',{students});
     })
+
+    // save data with form in mongodb
+    app.get("/add",(req,resp) =>{
+        resp.send(`<form method="post" action="add-student">
+            <input>`)
+            
+
+    })
 })
 
 app.listen(3200);
