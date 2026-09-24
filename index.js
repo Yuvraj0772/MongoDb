@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import express from 'express'
+import express, { urlencoded } from 'express'
 
 const dbName = "school"
 const url = "mongodb://localhost:27017/"
@@ -20,6 +20,8 @@ const app = express();
 
 // Displaying Data From MongoDB
 app.set("view engine","ejs");
+// for save data form 
+app.use(express.urlencoded({extended:true}))
 
 // app.get('/',async(req,resp)=>{
 //     await client.connect();
@@ -49,12 +51,24 @@ client.connect().then((connection) =>{
     })
 
     // save data with form in mongodb
-    app.get("/add",(req,resp) =>{
-        resp.send(`<form method="post" action="add-student">
-            <input>`)
-            
+    app.get("/add", (req, resp) => { 
+    resp.render("add-student") 
+    });
 
+    
+    app.post("/add-student",async(req,resp)=>{
+         const Collection = db.collection("students");
+         const result = await Collection.insertOne(req.body)
+         console.log(result)
+        // const students = await Collection.find().toArray();
+        resp.send("data saved");
+        console.log(req.body);
     })
+
+
+
+
+   // app.post("/add-student")
 })
 
 app.listen(3200);
