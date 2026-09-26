@@ -65,6 +65,11 @@ client.connect().then((connection) =>{
         console.log(req.body);
     })
 
+    app.post('/add-student-api',async(req,resp)=>{
+        console.log(req.body);
+        
+    })
+
 
 
 
