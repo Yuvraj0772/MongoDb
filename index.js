@@ -65,9 +65,26 @@ client.connect().then((connection) =>{
         console.log(req.body);
     })
 
+
+
+    // post Api for save data in mongoDB 
     app.post('/add-student-api',async(req,resp)=>{
         console.log(req.body);
-        
+        const {name,email,age} = req.body;
+        if(!name || !email || !age){
+            resp.send({
+                "message" : "operation failed",
+                "success" : "false"         
+            });
+            return false;
+        }
+        const Collection =db.collection("students")
+        const result = await Collection.insertOne({name,email,age});
+        resp.send({
+            "message" : "Data Stored",
+            "success" : "true",
+            "result" : result 
+        });
     })
 
 
