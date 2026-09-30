@@ -147,6 +147,15 @@ app.delete("/delete/:id",async(req,resp)=>{
 })
 
 
+// populate data with mongodb in node.js
+
+app.get("/ui/student/:id",async(req,resp)=>{
+    const id =req.params.id;
+    const Collection = db.collection('students')
+    const result = await Collection.findOneAndDelete
+})
+
+
 
 
 
