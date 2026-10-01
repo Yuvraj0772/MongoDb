@@ -131,9 +131,9 @@ client.connect().then((connection) =>{
 app.delete("/delete/:id",async(req,resp)=>{
     console.log(req.params.id);
     const Collection = db.collection('students')
-    const result = await Collection.deleteOne({_id:new ObjectId})
+    const result = await Collection.deleteOne({_id:new ObjectId(req.params.id)})
     if(result){
-        response.send({
+        resp.send({
             message:"Student data deleted",
             success:true
         })
@@ -146,15 +146,26 @@ app.delete("/delete/:id",async(req,resp)=>{
     }
 })
 
+// to delete data from ui with mongodb in node.js
+app.get("/ui/delete/:id",async(req,resp)=>{
+    console.log(req.params.id);
+    const Collection = db.collection('students')
+    const result = await Collection.deleteOne({_id:new ObjectId(req.params.id)})
+    if(result){
+        resp.send("<h1>Student data deleted</h1>")
+    }
+    else{
+        resp.send("<h1>not deleted</h1>")
+    }
+})
 
-// populate data with mongodb in node.js
+//populate data with mongodb in node.js
 
 app.get("/ui/student/:id",async(req,resp)=>{
     const id =req.params.id;
     const Collection = db.collection('students')
     const result = await Collection.findOneAndDelete
 })
-
 
 
 
