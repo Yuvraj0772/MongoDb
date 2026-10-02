@@ -164,7 +164,31 @@ app.get("/ui/delete/:id",async(req,resp)=>{
 app.get("/ui/student/:id",async(req,resp)=>{
     const id =req.params.id;
     const Collection = db.collection('students')
-    const result = await Collection.findOneAndDelete
+    const result = await Collection.findOne({_id:new ObjectId(id)})
+    if(result){
+        resp.render("update-student",{student:result})
+    }
+    else{
+        resp.send("<h1>not found</h1>")
+    }
+})
+
+app.post("/ui/student/:id",async(req,resp)=>{
+    const id = req.params.id;
+    const Collection = db.collection('students')
+    const result = await Collection.updateOne({_id:new ObjectId(id)},{$set:req.body})
+
+    if(result){
+        resp.send({
+            message:"Student data updated",
+            success:true
+        })
+    }else{
+        resp.send({
+            message:"not updated",
+            success:false
+        })
+    }   
 })
 
 
