@@ -202,6 +202,7 @@
 // connect mongoDB with Moongoose - mongoose is reiable and easy to use than mongodb native driver
 import mongoose from "mongoose";
 import express from "express";
+import studentModel from "./model/studentModel.js";
 
 const app = express();
 
@@ -221,6 +222,15 @@ async function dbConnection() {
 }
 
 dbConnection();
-app.listen(3200);
+//app.listen(3200);
 
 // Get data API with mongoose
+app.get('/', async (req, resp) => {
+    await mongoose.connect("mongodb://localhost:27017/").then(async () => {
+        console.log("Connected to MongoDB");
+        const studentData = await studentModel.find();
+        resp.send(studentData);
+    })
+})
+
+app.listen(3200)
