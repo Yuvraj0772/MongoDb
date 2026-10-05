@@ -205,6 +205,7 @@ import express from "express";
 import studentModel from "./model/studentModel.js";
 
 const app = express();
+app.use(express.json());
 
 async function dbConnection() {
     await mongoose.connect("mongodb://localhost:27017/");
@@ -230,6 +231,17 @@ app.get('/', async (req, resp) => {
         console.log("Connected to MongoDB");
         const studentData = await studentModel.find();
         resp.send(studentData);
+    })
+})
+
+// make POST api in node with mongoose 
+app.post('/save',async(req,resp)=>{
+    console.log(req.body);
+    const studentData = await studentModel.create(req.body);
+    resp.send({
+        message:"data saved",
+        success:true,
+        data:studentData
     })
 })
 
