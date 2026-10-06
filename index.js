@@ -237,12 +237,36 @@ app.get('/', async (req, resp) => {
 // make POST api in node with mongoose 
 app.post('/save',async(req,resp)=>{
     console.log(req.body);
+    if(!req.body.name || !req.body.email || !req.body.age) {
+        resp.send({
+            message:"operation failed",
+            success:false,
+        })
+        return false;
+    }
     const studentData = await studentModel.create(req.body);
     resp.send({
         message:"data saved",
         success:true,
         data:studentData
     })
+})
+
+app.put('/update/:id',async(req,resp)=>{
+    const id = req.params.id;
+    const updatedData = await studentModel.findByIdAndUpdate(id, req.body, { new: true });
+    if(updatedData) {
+        resp.send({
+            message:"data updated",
+            success:true,
+            data:updatedData
+        })
+    } else {
+        resp.send({
+            message:"update failed",
+            success:false
+        })
+    }
 })
 
 app.listen(3200)
