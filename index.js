@@ -252,6 +252,8 @@ app.post('/save',async(req,resp)=>{
     })
 })
 
+
+// make PUT api in node with mongoose
 app.put('/update/:id',async(req,resp)=>{
     const id = req.params.id;
     const updatedData = await studentModel.findByIdAndUpdate(id, req.body, { new: true });
@@ -268,5 +270,20 @@ app.put('/update/:id',async(req,resp)=>{
         })
     }
 })
+
+// delete api with mongoose
+app.delete('/delete/:id',async(req,resp)=>{
+    const id = req.params.id;
+    const deletedData = await studentModel.findByIdAndDelete(id);
+    resp.send({
+        message:"data deleted",
+        success:true
+    })
+})
+
+// CORS issue - cross origin resource sharing issue - to solve this issue we use cors package in node.js
+import cors from "cors";
+app.use(cors());
+
 
 app.listen(3200)
