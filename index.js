@@ -1,6 +1,7 @@
 // import { MongoClient, ObjectId } from 'mongodb';
 // import express, { urlencoded } from 'express'
 
+
 // const dbName = "school"
 // const url = "mongodb://localhost:27017/"
 
@@ -203,6 +204,8 @@
 import mongoose from "mongoose";
 import express from "express";
 import studentModel from "./model/studentModel.js";
+import multer from "multer";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
@@ -282,8 +285,35 @@ app.delete('/delete/:id',async(req,resp)=>{
 })
 
 // CORS issue - cross origin resource sharing issue - to solve this issue we use cors package in node.js
-import cors from "cors";
+
 app.use(cors());
+
+// uploads files in nodejs
+const upload = multer({dest:"uploads"});
+const storage = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,"uploads")
+    },
+    filename:function(req,file,cb){
+        cb(null,file.originalname)
+    }
+})
+app.get('/',(req,resp)=>{
+    resp.send(`
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <button type="submit" value="Upload" />
+        </form>
+    `)
+})
+
+app.post('/upload',upload.single('file'),(req,resp)=>{
+    resp.send({
+        message:"file uploaded",
+        info:req.file
+    })
+})
+
 
 
 app.listen(3200)
